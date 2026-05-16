@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: n8n-etsyboostai
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+
+    envVars:
+      # URL permanente que asigna Render (basada en el nombre del servicio)
+      - key: N8N_HOST
+        value: n8n-etsyboostai.onrender.com
+      - key: N8N_WEBHOOK_URL
+        value: https://n8n-etsyboostai.onrender.com/
+      - key: N8N_PROTOCOL
+        value: https
+
+      # Clave de encriptacion - Render genera un valor aleatorio en el primer deploy
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+
+      # Evita problemas de cookie con proxies inversos
+      - key: N8N_SECURE_COOKIE
+        value: "false"
+
+      # Timezone Chile
+      - key: GENERIC_TIMEZONE
+        value: America/Santiago
+      - key: TZ
+        value: America/Santiago
+
+      # Base de datos: SQLite por defecto (gratis, persiste en disco efimero)
+      # Para persistencia real agregar Render PostgreSQL y usar DB_TYPE=postgresdb
+      - key: DB_TYPE
+        value: sqlite
+
+      - key: N8N_LOG_LEVEL
+        value: info
